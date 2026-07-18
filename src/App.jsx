@@ -1,121 +1,417 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 
-const products = [
+const pageRoutes = ['home', 'potensi', 'umkm', 'galeri', 'kontak'];
+
+const umkmSectors = [
   {
-    id: 1,
-    name: 'Kopi Kayumas Signature',
-    type: 'Robusta Premium',
-    description: 'Rasa earthy yang hangat, aroma penuh, dan body yang mantap untuk pagi yang penuh semangat.',
-    accent: 'Aroma kayu manis, cokelat pekat, dan sentuhan caramel.',
-    badge: 'Paling dicari',
+    name: 'Kopi & Minuman Lokal',
+    type: 'Kopi khas desa',
+    description: 'Kopi menjadi salah satu identitas kuat yang mewakili karakter UMKM Desa Kayumas, namun tetap menjadi bagian dari ekosistem usaha yang lebih luas.',
+    accent: 'Rasa hangat, aroma khas, dan nilai ekonomi yang terus berkembang.',
+    badge: 'Unggulan desa',
   },
   {
-    id: 2,
-    name: 'Kopi Arjasa Glow',
-    type: 'Arabika Halus',
-    description: 'Cocok untuk pencinta kopi yang suka nuansa floral dan rasa bersih yang elegan.',
-    accent: 'Nutrisi lokal, dipanggang perlahan untuk hasil yang konsisten.',
-    badge: 'Favorit pagi',
-  },
-  {
-    id: 3,
-    name: 'Kopi Keluarga',
-    type: 'Bubuk Kemasan',
-    description: 'Pilihan praktis untuk dibawa pulang, cocok dipadukan dengan berbagai suasana.',
-    accent: 'Tersedia dalam kemasan yang ramah, rapi, dan siap jual.',
-    badge: 'Siap dibagikan',
+    name: 'Kuliner dan Camilan',
+    type: 'Makanan khas',
+    description: 'Beragam produk makanan dan jajanan menjadi sarana memperkenalkan kreativitas warga serta daya tarik ekonomi lokal yang dekat dengan masyarakat.',
+    accent: 'Mudah dijangkau, nikmat dikonsumsi, dan kuat dalam branding lokal.',
+    badge: 'Daya tarik warga',
   },
 ];
 
 const highlights = [
-  'Biji kopi dipilih dari petani lokal sekitar Desa Kayumas.',
-  'Proses roasting dibuat sederhana namun penuh karakter.',
-  'Produk disajikan dengan branding yang kuat dan modern.',
+  'Desa Kayumas memiliki ragam potensi ekonomi yang tumbuh dari semangat warga.',
+  'UMKM menjadi saluran nyata untuk memperluas jangkauan produk lokal.',
+  'Kayartha hadir untuk memperkuat branding dan promosi potensi desa secara modern.',
 ];
 
 const stories = [
   {
-    title: 'Dari ladang ke cangkir',
-    text: 'Kopi dari desa ini tumbuh dari semangat warga yang ingin menampilkan hasil panen dengan nilai jual lebih tinggi.',
+    title: 'Dari keterampilan warga',
+    text: 'Setiap usaha lahir dari kemampuan, kerja keras, dan kreativitas yang terus diasah oleh masyarakat desa.',
   },
   {
-    title: 'Mengangkat ekonomi warga',
-    text: 'Setiap kemasan adalah cerminan kerja sama, inovasi, dan harapan bagi keluarga yang terlibat dalam UMKM.',
+    title: 'Dari kerja sama lokal',
+    text: 'Kekuatan UMKM tidak hanya datang dari satu produk, tetapi juga dari semangat gotong royong yang membentuk ekosistem usaha.',
   },
   {
-    title: 'Menjadi identitas baru',
-    text: 'Kayumas bukan sekadar desa, tetapi juga destinasi rasa yang siap dikenal luas oleh masyarakat.',
+    title: 'Dari potensi yang terus tumbuh',
+    text: 'Desa Kayumas memiliki peluang besar untuk dikenal lebih luas melalui promosi yang tepat dan berkelanjutan.',
   },
 ];
 
 const stats = [
-  { label: 'Produk unggulan', value: '3' },
-  { label: 'Nuansa lokal', value: '100%' },
-  { label: 'Dukungan desa', value: '24/7' },
+  { label: 'Ragam UMKM', value: '2' },
+  { label: 'Potensi desa', value: 'Tinggi' },
+  { label: 'Branding', value: 'Kayartha' },
 ];
 
-const features = [
+const galleryItems = [
+  { title: 'Kopi Tradisional', subtitle: 'Rasa hangat dan kental', text: 'Produk yang menyimpan karakter khas desa dengan nuansa modern dalam kemasannya.' },
+  { title: 'Jajanan Lokal', subtitle: 'Camilan yang dekat dengan warga', text: 'Mudah dijual, mudah dikenali, dan kuat dalam nilai budaya lokal.' },
+  { title: 'Perkakas Tradisional', subtitle: 'Arit • Kapak • Pisau', text: 'Peralatan pertukangan dan pertanian buatan pengrajin lokal — fungsional, tahan lama, dan bernilai budaya.' },
+];
+
+const umkmList = [
   {
-    title: 'Biji pilihan',
-    text: 'Dipilih dari petani lokal sekitar Desa Kayumas dengan standar rasa yang konsisten.',
+    slug: 'keripik-pisang-kayumas',
+    name: 'Keripik Pisang Kayumas',
+    category: 'Kuliner dan Camilan',
+    description: 'Keripik pisang khas Kayumas, renyah, gurih, dan dikemas rapi untuk pasar lokal dan luar daerah. Diproduksi oleh UMKM lokal dengan resep turun-temurun.',
+    location: 'Dusun Krajan, Desa Kayumas, Kec. Arjasa, Kab. Situbondo',
+    phone: '+62 888-8888-8888',
+    whatsapp: '+62888888888888',
+    image: '/assets/keripik-pisang.jpg',
   },
   {
-    title: 'Rasa khas',
-    text: 'Dipanggang secara perlahan untuk menghasilkan aroma hangat dan karakter yang kuat.',
-  },
-  {
-    title: 'Branding modern',
-    text: 'Kemasan dan penyajian dibuat rapi agar identitas UMKM terasa lebih percaya diri.',
+    slug: 'kopi-kayumas-signature',
+    name: 'Kopi Kayumas Signature',
+    category: 'Kopi & Minuman Lokal',
+    description: 'Robusta premium dari petani lokal, diproses sederhana namun penuh karakter rasa.',
+    location: 'Desa Kayumas, Arjasa',
+    phone: '+62 812-9876-5432',
+    whatsapp: '+6281298765432',
+    image: '/assets/Kopi-Kayumas.jpg',
   },
 ];
 
-export default function App() {
-  const [activeProduct, setActiveProduct] = useState(0);
+function getPageFromHash() {
+  const raw = window.location.hash.replace('#', '') || 'home';
+  const [base, sub] = raw.split('/');
+  if (base === 'umkm' && sub) return `umkm/${sub}`;
+  return pageRoutes.includes(base) ? base : 'home';
+}
 
-  useEffect(() => {
+function App() {
+  const [page, setPage] = React.useState(getPageFromHash);
+  const [activeSector, setActiveSector] = React.useState(0);
+
+  React.useEffect(() => {
+    const onHashChange = () => setPage(getPageFromHash());
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  React.useEffect(() => {
     const timer = window.setInterval(() => {
-      setActiveProduct((prev) => (prev + 1) % products.length);
-    }, 4000);
+      setActiveSector((prev) => (prev + 1) % umkmSectors.length);
+    }, 4200);
     return () => window.clearInterval(timer);
   }, []);
 
-  const selected = products[activeProduct];
+  React.useEffect(() => {
+    document.title = page === 'home'
+      ? 'Potensi UMKM Kayumas — Kayartha'
+      : `${page.charAt(0).toUpperCase() + page.slice(1)} — Kayartha`;
+  }, [page]);
 
-  return (
-    <div className="app-shell">
-      <header className="hero" id="home">
-        <nav className="topbar">
-          <div className="brand">
-            <span className="brand-mark">☕</span>
-            <span>Kayumas Coffee</span>
-          </div>
-          <div className="nav-links">
-            <a href="#potensi">Potensi</a>
-            <a href="#produk">Produk</a>
-            <a href="#testimoni">Cerita</a>
-            <a href="#hubungi">Hubungi</a>
-          </div>
-        </nav>
+  const selected = umkmSectors[activeSector];
 
-        <div className="hero-content">
-          <div className="hero-copy">
-            <p className="eyebrow">UMKM Desa Kayumas • Arjasa • Situbondo</p>
-            <h1>Rasakan kopi lokal yang punya jiwa, aroma, dan cerita.</h1>
-            <p className="lead">
-              Desa Kayumas punya potensi luar biasa, dan kini kopi lokalnya hadir untuk memperkenalkan
-              kekayaan UMKM secara lebih dekat, hangat, dan penuh energi.
-            </p>
-            <div className="hero-actions">
-              <a className="btn primary" href="#produk">Lihat produk</a>
-              <a className="btn secondary" href="#hubungi">Jelajahi UMKM</a>
+  const PortfolioCarousel = ({ items = [] }) => {
+    const ref = React.useRef(null);
+    const isDown = React.useRef(false);
+    const startX = React.useRef(0);
+    const scrollLeft = React.useRef(0);
+    const hoverRef = React.useRef(false);
+
+    React.useEffect(() => {
+      const el = ref.current;
+      if (!el) return;
+
+      const onMouseDown = (e) => {
+        isDown.current = true;
+        el.classList.add('dragging');
+        startX.current = e.pageX - el.offsetLeft;
+        scrollLeft.current = el.scrollLeft;
+      };
+      const onMouseLeave = () => { isDown.current = false; el.classList.remove('dragging'); };
+      const onMouseUp = () => { isDown.current = false; el.classList.remove('dragging'); };
+      const onMouseMove = (e) => {
+        if (!isDown.current) return;
+        e.preventDefault();
+        const x = e.pageX - el.offsetLeft;
+        const walk = (x - startX.current);
+        el.scrollLeft = scrollLeft.current - walk;
+      };
+
+      const onTouchStart = (e) => {
+        isDown.current = true;
+        startX.current = e.touches[0].pageX - el.offsetLeft;
+        scrollLeft.current = el.scrollLeft;
+      };
+      const onTouchMove = (e) => {
+        if (!isDown.current) return;
+        const x = e.touches[0].pageX - el.offsetLeft;
+        const walk = (x - startX.current);
+        el.scrollLeft = scrollLeft.current - walk;
+      };
+      const onTouchEnd = () => { isDown.current = false; };
+
+      el.addEventListener('mousedown', onMouseDown);
+      el.addEventListener('mouseleave', onMouseLeave);
+      el.addEventListener('mouseup', onMouseUp);
+      el.addEventListener('mousemove', onMouseMove);
+
+      el.addEventListener('touchstart', onTouchStart, { passive: true });
+      el.addEventListener('touchmove', onTouchMove, { passive: true });
+      el.addEventListener('touchend', onTouchEnd);
+
+      return () => {
+        el.removeEventListener('mousedown', onMouseDown);
+        el.removeEventListener('mouseleave', onMouseLeave);
+        el.removeEventListener('mouseup', onMouseUp);
+        el.removeEventListener('mousemove', onMouseMove);
+        el.removeEventListener('touchstart', onTouchStart);
+        el.removeEventListener('touchmove', onTouchMove);
+        el.removeEventListener('touchend', onTouchEnd);
+      };
+    }, []);
+
+    React.useEffect(() => {
+      let rafId = null;
+      let last = performance.now();
+      const speed = 32;
+
+      const loop = (now) => {
+        const el = ref.current;
+        if (el && !isDown.current && !hoverRef.current) {
+          const dt = (now - last) / 1000;
+          const move = speed * dt;
+          const half = el.scrollWidth / 2;
+          el.scrollLeft = el.scrollLeft + move;
+          if (el.scrollLeft >= half) el.scrollLeft -= half;
+        }
+        last = now;
+        rafId = requestAnimationFrame(loop);
+      };
+      rafId = requestAnimationFrame(loop);
+      return () => { if (rafId) cancelAnimationFrame(rafId); };
+    }, []);
+
+    const scrollBy = (dir = 1) => {
+      if (!ref.current) return;
+      ref.current.scrollBy({ left: dir * 280, behavior: 'smooth' });
+    };
+
+    const btnStyle = {
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      width: 36,
+      height: 36,
+      borderRadius: '50%',
+      border: 'none',
+      background: 'rgba(0,0,0,0.45)',
+      color: '#fff',
+      cursor: 'pointer',
+      zIndex: 2,
+    };
+
+    return (
+      <div style={{ position: 'relative', marginTop: 20 }}>
+        <button aria-label="Scroll left" onClick={() => scrollBy(-1)} style={{ ...btnStyle, left: 6 }}>‹</button>
+        <div ref={ref} className="portfolio-scroll" onMouseEnter={() => { hoverRef.current = true; }} onMouseLeave={() => { hoverRef.current = false; }} style={{ display: 'flex', overflowX: 'auto', gap: 12, padding: '8px 24px', scrollBehavior: 'smooth' }}>
+          {([...items, ...items]).map((u, idx) => (
+            <div key={`${u.slug}-${idx}`} style={{ minWidth: 520, background: 'transparent', borderRadius: 10, overflow: 'hidden', border: '1px solid var(--border)', color: '#fff', cursor: 'pointer' }} onClick={() => { window.location.hash = `#umkm/${u.slug}`; }}>
+              <img src={u.image} alt={u.name} style={{ width: '100%', height: 260, objectFit: 'cover', display: 'block' }} onError={(e) => { e.target.style.display = 'none'; }} />
+              <div style={{ padding: 12 }}>
+                <strong>{u.name}</strong>
+                <div style={{ color: 'var(--muted)', fontSize: 13 }}>{u.category}</div>
+              </div>
             </div>
-            <div className="feature-list">
-              {features.map((feature) => (
-                <div className="feature-card" key={feature.title}>
-                  <h4>{feature.title}</h4>
-                  <p>{feature.text}</p>
+          ))}
+        </div>
+        <button aria-label="Scroll right" onClick={() => scrollBy(1)} style={{ ...btnStyle, right: 6 }}>›</button>
+      </div>
+    );
+  };
+
+  const renderPage = () => {
+    if (page.startsWith('umkm/') ) {
+      const slug = page.split('/')[1];
+      const item = umkmList.find((u) => u.slug === slug);
+      if (!item) {
+        return (
+          <section className="page-section">
+            <div className="section-heading">
+              <h2>UMKM tidak ditemukan</h2>
+              <p>Maaf, detail UMKM ini belum tersedia.</p>
+              <a className="btn secondary" href="#umkm">Kembali ke UMKM</a>
+            </div>
+          </section>
+        );
+      }
+
+      return (
+        <section className="page-section">
+          <div className="section-heading">
+            <p className="eyebrow">Detail UMKM</p>
+            <h2>{item.name}</h2>
+          </div>
+          <div className="about-grid">
+            <div className="panel">
+              <h3>{item.category}</h3>
+              <p>{item.description}</p>
+              <p><strong>Lokasi:</strong> {item.location}</p>
+              <p><strong>Telepon:</strong> <a href={`tel:${item.phone}`}>{item.phone}</a></p>
+              <p><strong>WhatsApp:</strong> <a href={`https://wa.me/${item.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank">Chat via WhatsApp</a></p>
+            </div>
+            <div className="panel">
+              <h3>Gambar produk / brand</h3>
+              <div className="gallery-card" style={{ textAlign: 'center' }}>
+                <img id="umkm-image" src={item.image} alt={item.name} style={{ maxWidth: '100%', borderRadius: 12 }} onError={(e)=>{e.target.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22500%22><rect width=%22800%22 height=%22500%22 fill=%22%2324120e%22/><text x=%2240%22 y=%22260%22 fill=%22%23f3c58a%22 font-family=%22Arial%22 font-size=%2232%22>Gambar tidak ditemukan</text></svg>'}} />
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: 18 }}>
+            <a className="btn primary" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.location)}`} target="_blank">Lihat di peta</a>
+            <a className="btn secondary" href="#umkm" style={{ marginLeft: 12 }}>Kembali ke UMKM</a>
+          </div>
+        </section>
+      );
+    }
+    if (page === 'potensi') {
+      return (
+        <section className="page-section">
+          <div className="section-heading">
+            <p className="eyebrow">Potensi desa</p>
+            <h2>Kayumas bergerak bukan hanya dari satu sektor, tetapi dari berbagai potensi usaha yang tumbuh dari masyarakat.</h2>
+          </div>
+          <div className="about-grid">
+            <div className="panel">
+              <h3>Kenapa desa ini menarik?</h3>
+              <p>Alam, keterampilan warga, dan semangat gotong royong menjadi fondasi kuat untuk membangun identitas ekonomi lokal yang serius dan berkelanjutan.</p>
+            </div>
+            <div className="panel highlight-list">
+              {highlights.map((item) => (
+                <div className="list-item" key={item}>
+                  <span>✦</span>
+                  <p>{item}</p>
                 </div>
               ))}
+            </div>
+          </div>
+          <div className="metric-grid">
+            <div className="metric-card">
+              <strong>4+</strong>
+              <span>kategori UMKM yang berkembang</span>
+            </div>
+            <div className="metric-card">
+              <strong>100%</strong>
+              <span>berbasis potensi lokal</span>
+            </div>
+            <div className="metric-card">
+              <strong>24/7</strong>
+              <span>semangat dukungan komunitas</span>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (page === 'umkm') {
+      return (
+        <section className="page-section">
+          <div className="section-heading">
+            <p className="eyebrow">Jejaring UMKM</p>
+            <h2>Beragam sektor usaha yang menyatukan ekonomi lokal, kreativitas, dan identitas desa.</h2>
+          </div>
+          <div className="product-switcher">
+            {umkmSectors.map((sector, index) => (
+              <button key={sector.type} className={index === activeSector ? 'chip active' : 'chip'} onClick={() => setActiveSector(index)}>
+                {sector.type}
+              </button>
+            ))}
+          </div>
+          <div className="product-box">
+            <div className="cup">
+              <div className="cup-liquid" />
+            </div>
+            <div>
+              <p className="eyebrow">Sedang berkembang</p>
+              <h3>{selected.name}</h3>
+              <p>{selected.description}</p>
+              <p style={{ color: '#f5cf93' }}>{selected.accent}</p>
+            </div>
+          </div>
+          <div style={{ marginTop: 20 }}>
+            <h3 className="eyebrow">Daftar UMKM</h3>
+            <div style={{ display: 'grid', gap: 12, marginTop: 8 }}>
+              {umkmList.map((u) => (
+                <a key={u.slug} href={`#umkm/${u.slug}`} className="panel" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                  <div style={{ width: 96, height: 64, background: 'linear-gradient(180deg,#3b1b0c,#6d3c1f)', borderRadius: 8, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={u.image} alt={u.name} style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: 6 }} onError={(e)=>{e.target.style.display='none'}} />
+                  </div>
+                  <div>
+                    <strong style={{ display: 'block' }}>{u.name}</strong>
+                    <span style={{ color: 'var(--muted)' }}>{u.category}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (page === 'galeri') {
+      return (
+        <section className="page-section">
+          <div className="section-heading">
+            <p className="eyebrow">Galeri kisah</p>
+            <h2>Potensi desa yang hidup lewat cerita, produk, dan pengalaman yang bisa dibagikan.</h2>
+          </div>
+          <div className="gallery-grid">
+            {galleryItems.map((item) => (
+              <article className="gallery-card" key={item.title}>
+                <div className="gallery-badge">✨</div>
+                <h3>{item.title}</h3>
+                <p className="gallery-subtitle">{item.subtitle}</p>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    if (page === 'kontak') {
+      return (
+        <section className="page-section">
+          <div className="section-heading">
+            <p className="eyebrow">Kolaborasi & dukung</p>
+            <h2>Jadikan potensi lokal sebagai bagian dari masa depan desa yang lebih kuat.</h2>
+          </div>
+          <div className="contact-grid">
+            <div className="panel">
+              <h3>Hubungi kolaborasi</h3>
+              <p>Untuk dukungan promosi, kerja sama, atau melihat lebih dekat potensi UMKM Desa Kayumas, silakan hubungi kami.</p>
+              <a className="btn primary" href="mailto:umkmkayumas@example.com">Kirim email</a>
+            </div>
+            <div className="panel">
+              <h3>Yang bisa didukung</h3>
+              <ul className="contact-list">
+                <li>Promosi produk lokal</li>
+                <li>Kerja sama branding</li>
+                <li>Pengembangan usaha dan jaringan</li>
+                <li>Partisipasi dalam misi desa</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    return (
+      <section className="page-section">
+        <div className="hero-content">
+          <div>
+            <p className="eyebrow">Potensi UMKM Desa Kayumas • Kayartha</p>
+            <h1>Memperkenalkan semangat ekonomi lokal Desa Kayumas melalui ragam UMKM.</h1>
+            <p className="lead">Situs ini bukan sekadar website desa, melainkan ruang promosi potensi masyarakat: dari produk, karya, hingga ide usaha yang tumbuh dari desa dan siap dikenal lebih luas.</p>
+            <div className="hero-actions">
+              <a className="btn primary" href="#umkm">Lihat potensi UMKM</a>
+              <a className="btn secondary" href="#kontak">Dukung desa</a>
             </div>
             <div className="stat-row">
               {stats.map((item) => (
@@ -128,11 +424,6 @@ export default function App() {
           </div>
 
           <div className="hero-card">
-            <div className="card-glow" />
-            <div className="card-topline">
-              <span className="card-pill">Produk terbaru</span>
-              <span className="card-pill muted">Autentik</span>
-            </div>
             <p className="card-badge">{selected.badge}</p>
             <h3>{selected.name}</h3>
             <p className="card-type">{selected.type}</p>
@@ -142,93 +433,66 @@ export default function App() {
             </div>
           </div>
         </div>
+
+        <div className="story-grid">
+          {stories.map((story) => (
+            <article className="story-card" key={story.title}>
+              <h3>{story.title}</h3>
+              <p>{story.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
+  };
+
+  return (
+    <div className="app-shell">
+      <header className="hero">
+        <nav className="topbar">
+          <a className="brand" href="#home">
+            <span className="brand-mark">🌿</span>
+            <span>Potensi UMKM Kayumas</span>
+          </a>
+          <div className="nav-links">
+            <a className={page === 'home' ? 'nav-active' : ''} href="#home">Beranda</a>
+            <a className={page === 'potensi' ? 'nav-active' : ''} href="#potensi">Potensi</a>
+            <a className={page === 'umkm' ? 'nav-active' : ''} href="#umkm">UMKM</a>
+            <a className={page === 'galeri' ? 'nav-active' : ''} href="#galeri">Galeri</a>
+            <a className={page === 'kontak' ? 'nav-active' : ''} href="#kontak">Kontak</a>
+          </div>
+        </nav>
+        {renderPage()}
       </header>
 
-      <main>
-        <section className="section" id="potensi">
+      <main className="main-content">
+        <section className="section">
           <div className="section-heading">
-            <p className="eyebrow">Potensi desa</p>
-            <h2>Kayumas lebih dari sekadar desa, ia adalah ruang tumbuh untuk ekonomi lokal.</h2>
+            <p className="eyebrow">Kenapa ini penting</p>
+            <h2>Setiap halaman memperkenalkan bagian berbeda dari kekuatan desa: ekonomi, budaya, kreativitas, dan potensi masa depan.</h2>
+          </div>
+          <div>
+            <h3 className="eyebrow">UMKM Desa Kayumas</h3>
+            <PortfolioCarousel items={umkmList} />
           </div>
           <div className="about-grid">
             <div className="panel">
-              <h3>Kenapa desa ini menarik?</h3>
-              <p>
-                Alam yang dekat, kultur yang kuat, dan semangat warga menjadi fondasi utama bagi lahirnya
-                produk-produk khas yang siap bersaing dan dikenal luas.
-              </p>
+              <h3>Visi Kayartha</h3>
+              <p>Memperkenalkan Desa Kayumas sebagai ruang tumbuh yang kuat, terhubung, dan penuh peluang bagi masyarakatnya.</p>
             </div>
-            <div className="panel highlight-list">
-              {highlights.map((item) => (
-                <div className="list-item" key={item}>
-                  <span>✦</span>
-                  <p>{item}</p>
-                </div>
-              ))}
+            <div className="panel">
+              <h3>Tujuan promosi</h3>
+              <p>Membantu potensi lokal lebih terlihat, lebih dekat, dan lebih mudah dipahami oleh audiens yang lebih luas.</p>
             </div>
-          </div>
-        </section>
-
-        <section className="section" id="produk">
-          <div className="section-heading">
-            <p className="eyebrow">Produk unggulan</p>
-            <h2>Setiap sajian kopi membawa nuansa cokelat, hangat, dan penuh karakter.</h2>
-          </div>
-
-          <div className="product-switcher">
-            {products.map((product, index) => (
-              <button
-                key={product.id}
-                className={index === activeProduct ? 'chip active' : 'chip'}
-                onClick={() => setActiveProduct(index)}
-              >
-                {product.type}
-              </button>
-            ))}
-          </div>
-
-          <div className="product-showcase">
-            <div className="product-visual">
-              <div className="cup">
-                <div className="cup-liquid" />
-              </div>
-            </div>
-            <div className="product-details">
-              <p className="eyebrow">Yang sedang naik daun</p>
-              <h3>{selected.name}</h3>
-              <p>{selected.description}</p>
-              <p className="detail-note">{selected.accent}</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="section" id="testimoni">
-          <div className="section-heading">
-            <p className="eyebrow">Cerita di balik produk</p>
-            <h2>Setiap cangkir adalah perpaduan semangat, kerja keras, dan rasa kebersamaan.</h2>
-          </div>
-          <div className="story-grid">
-            {stories.map((story) => (
-              <article className="story-card" key={story.title}>
-                <h3>{story.title}</h3>
-                <p>{story.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="section cta-section" id="hubungi">
-          <div className="cta-card">
-            <p className="eyebrow">Ayo dukung UMKM Kayumas</p>
-            <h2>Jadikan kopi lokal sebagai bagian dari momenmu setiap hari.</h2>
-            <p>
-              Dari Desa Kayumas, Kecamatan Arjasa, Kabupaten Situbondo, produk ini hadir untuk membuka
-              peluang, memperluas jangkauan, dan menampilkan identitas desa yang kuat.
-            </p>
-            <a className="btn primary" href="mailto:umkmkayumas@example.com">Hubungi UMKM</a>
           </div>
         </section>
       </main>
+
+      <footer className="footer">
+        <p>© 2026 KKNKayumas2026. Semua konten dipersembahkan untuk memperkenalkan potensi UMKM Desa Kayumas.</p>
+      </footer>
     </div>
   );
 }
+
+export default App;
